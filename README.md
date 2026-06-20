@@ -1,23 +1,25 @@
-# 🤖 AI Multi-LLM Router (LangGraph + Gemini + GPT + MongoDB)
+# 🤖 AI Multi-LLM Router with MongoDB Checkpointing (LangGraph)
 
 ## 📌 Overview
 
-This project is a **multi-LLM routing system** built using LangGraph. It intelligently routes user queries through different models based on response quality.
+This project is a **multi-LLM routing system** built using LangGraph.
 
-It uses:
-- 🧠 Google Gemini → Primary response generator  
-- ⚖️ GPT Score Evaluator → Rates response (0–10)  
-- 🔁 GPT-4.1-mini → Fallback for weak responses  
-- 💾 MongoDB → Persistent memory (checkpointing)
+It routes user queries through different language models based on response quality using a scoring mechanism and maintains persistent state using MongoDB.
 
 ---
 
-## 🚀 Workflow
+## ⚙️ Architecture
 
-User Query → Gemini → Score Evaluator → Decision:
-- Score ≥ 8.5 → Accept Gemini response  
-- Score < 8.5 → GPT fallback response  
-→ Store final state in MongoDB  
+User Query
+↓
+Gemini Model (Primary Response)
+↓
+Score Evaluator (0–10)
+↓
+IF score ≥ 8.5 → Accept Gemini response
+IF score < 8.5 → GPT-4.1-mini fallback
+↓
+MongoDB Checkpointer (State Persistence)
 
 ---
 
@@ -40,5 +42,10 @@ Instead of using one model:
 - Pydantic 📦 (structured scoring)  
 - Docker 🐳  
 - dotenv 🔐  
-
 ---
+
+## ▶️ Setup 
+
+### 1. Install dependencies
+```bash
+pip install -r requirements.txt
