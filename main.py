@@ -29,14 +29,12 @@ class State(TypedDict):
     user_query:str 
     response:list
     final_response:str 
-    score:float   #for evaluating score we used another node 
-
+    score:float  
 
     #first node 
 def first_model(state:State):
     print(f"Gemini node invoked")
     resp=llm1.invoke(state['user_query'])
-    
     return {"response":[resp.content],"final_response":resp} 
 
 
@@ -45,8 +43,7 @@ def score_evaluator(state:State):
         print(f"Score evaluator invoked")
 
         structured_score=llm2.with_structured_output(Score)   #here referring to the base model  Score
-
-        
+    
         PROMPT=f"""
 
     Hey AI assistant you are a Score Evaluator Agent where you should rate the response from (0-10.0)  
@@ -69,7 +66,6 @@ def score_evaluator(state:State):
         return {"score":obtained_score,"response":state['response']}
 
 
-
     #conditional edge [here routing takes place based on the Score evaluator node]
 def route(state:State):
         print(f"Routing based on score...")
@@ -85,8 +81,8 @@ def conditional_model(state:State):
 
         return {"response":[resp.content],"final_response":resp,"score":state['score']}
 
-graph=StateGraph(State)   #this object carries the State Object through the nodes 
 
+graph=StateGraph(State)   #this object carries the state through the nodes 
 
 #nodes 
 graph.add_node("gemini",first_model)
