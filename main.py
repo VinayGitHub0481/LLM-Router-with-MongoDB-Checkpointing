@@ -11,6 +11,8 @@ import os
 
 load_dotenv()
 
+URL=os.getenv("MONGO_DB_URL")
+
 llm1=ChatGoogleGenerativeAI(
     model='gemini-2.5-flash',
     api_key=os.getenv("GOOGLE_API_KEY")
@@ -103,8 +105,6 @@ graph.add_edge("chat-gpt",END)   #so here after the routing it comes to the gpt 
 
 
 #MongoDB checkpointer
-URL='mongodb://admin:admin@localhost:27017'
-
 with MongoDBSaver.from_conn_string(URL) as checkpoint:
         persistent_data=graph.compile(checkpointer=checkpoint)  #here state management persistantly takes place using checkpointer(mongodb saver)
 
